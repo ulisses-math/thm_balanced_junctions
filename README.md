@@ -121,10 +121,10 @@ at t = 300 s.
 | column, `VolumeJunction1Phase` | +85.1 Pa, -340.6 Pa | 0.000 Pa in every cell |
 | column with a 4.6:1 contraction, `JunctionParallelChannels1Phase` | +85.1 Pa (cell above), -34.1 Pa (cell below), +306.5 Pa in the rest of the lower channel | 0.000 Pa in every cell |
 | T junction, `VolumeJunction1Phase` | +85.1 Pa, -340.6 Pa, -85.1 Pa in the horizontal channel | 0.000 Pa in every cell of the three channels |
-| loop, `VolumeJunction1Phase` | jump between the cell centers next to the top junction -255.4 Pa (exact: about -510.6 Pa); rho*u*A -0.032 kg/s | -510.86 Pa; below 1e-5 kg/s |
+| loop, `VolumeJunction1Phase` | jump between the cell centers next to the top junction -255.4 Pa (exact: -510.86 Pa); rho*u*A -0.032 kg/s | -510.86 Pa; below 1e-5 kg/s |
 | loop, `StagnationJunction1Phase` | with `hydrostatic_correction = false`: loop flow of 1214 kg/s | below 1e-5 kg/s |
 | column, `JunctionOneToOne1Phase` | +21.3 Pa (cell above), -242.7 Pa (cell below) | no corrected version |
-| loop, `JunctionOneToOne1Phase` | jump between the cell centers next to the top junction -306.5 Pa (exact: about -510.6 Pa); rho*u*A -0.034 kg/s | no corrected version |
+| loop, `JunctionOneToOne1Phase` | jump between the cell centers next to the top junction -306.5 Pa (exact: -510.86 Pa); rho*u*A -0.034 kg/s | no corrected version |
 
 Notes:
 

@@ -58,11 +58,23 @@ python3 - $O <<'EOF'
 import csv
 import sys
 
+import glob
+
 o = sys.argv[1]
+
+
+def top_cell(path):
+    rows = sorted(csv.DictReader(open(glob.glob(path)[0])), key=lambda r: float(r["z"]))
+    return float(rows[-1]["z"]), float(rows[-1]["rho"])
+
+
 print("== closed loop, at t = 300 s")
-print(f"  {'case':14s} {'mdot_A [kg/s]':>14s} {'offset_top [Pa]':>16s}")
+print(f"  {'case':14s} {'mdot_A [kg/s]':>14s} {'offset_top [Pa]':>16s} {'exact [Pa]':>11s}")
 for tag in ["loop_vj", "loop_hvj", "loop_stag_off", "loop_stag", "loop_o2o"]:
     r = list(csv.DictReader(open(f"{o}/{tag}.csv")))[-1]
-    print(f"  {tag:14s} {float(r['mdot_A']):14.5f} {float(r['offset_top']):16.2f}")
-print("  exact hydrostatic offset_top: -rho * g * (0.140 - 0.035) / 2 = about -510.6 Pa")
+    # exact jump between the two cell centers next to the top junction, with their own density
+    zA, rA = top_cell(f"{o}/{tag}_prof_A_*.csv")
+    zB, rB = top_cell(f"{o}/{tag}_prof_B_*.csv")
+    exact = -9.81 * 0.5 * (rA + rB) * (zA - zB)
+    print(f"  {tag:14s} {float(r['mdot_A']):14.5f} {float(r['offset_top']):16.2f} {exact:11.2f}")
 EOF
