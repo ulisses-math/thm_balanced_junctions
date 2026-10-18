@@ -47,7 +47,7 @@ REACTOR                     := no
 RDG                         := no
 SOLID_MECHANICS             := no
 STOCHASTIC_TOOLS            := no
-THERMAL_HYDRAULICS          := no
+THERMAL_HYDRAULICS          := yes
 XFEM                        := no
 
 include $(MOOSE_DIR)/modules/modules.mk

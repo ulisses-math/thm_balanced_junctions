@@ -21,7 +21,8 @@ ThmBalancedJunctionsTestApp::validParams()
   return params;
 }
 
-ThmBalancedJunctionsTestApp::ThmBalancedJunctionsTestApp(const InputParameters & parameters) : MooseApp(parameters)
+ThmBalancedJunctionsTestApp::ThmBalancedJunctionsTestApp(const InputParameters & parameters)
+  : MooseApp(parameters)
 {
   ThmBalancedJunctionsTestApp::registerAll(
       _factory, _action_factory, _syntax, getParam<bool>("allow_test_objects"));
@@ -30,7 +31,10 @@ ThmBalancedJunctionsTestApp::ThmBalancedJunctionsTestApp(const InputParameters &
 ThmBalancedJunctionsTestApp::~ThmBalancedJunctionsTestApp() {}
 
 void
-ThmBalancedJunctionsTestApp::registerAll(Factory & f, ActionFactory & af, Syntax & s, bool use_test_objs)
+ThmBalancedJunctionsTestApp::registerAll(Factory & f,
+                                         ActionFactory & af,
+                                         Syntax & s,
+                                         bool use_test_objs)
 {
   ThmBalancedJunctionsApp::registerAll(f, af, s);
   if (use_test_objs)

@@ -1,0 +1,91 @@
+[Tests]
+  # a fluid at rest under gravity has to stay at rest, also when the cells on the two sides of a
+  # junction have different heights; without the correction (hydrostatic_correction = false, or the
+  # official junctions) the same cases show the pressure offsets and flows listed in README.md
+
+  [null_loop_stagnation_200_50]
+    type = 'CSVDiff'
+    input = 'null_loop.i'
+    cli_args = 'jt=StagnationJunction1Phase nA=200 nB=50 AB=0.5 g=-9.81 rdg=minmod '
+               'Outputs/file_base=null_loop_hydro_200_50'
+    csvdiff = 'null_loop_hydro_200_50.csv'
+    abs_zero = 1e-4
+    rel_err = 1e-5
+    requirement = 'A closed isothermal loop of two vertical legs at rest, joined by '
+                  'StagnationJunction1Phase with 35 mm cells on one side and 140 mm on the other, '
+                  'shall stay at rest (|mdot| < 1e-4 kg/s) with the exact hydrostatic pressure '
+                  'jump between the junction-adjacent cell centers.'
+  []
+  [null_loop_stagnation_50_200]
+    type = 'CSVDiff'
+    input = 'null_loop.i'
+    cli_args = 'jt=StagnationJunction1Phase nA=50 nB=200 AB=0.5 g=-9.81 rdg=minmod '
+               'Outputs/file_base=null_loop_hydro_50_200'
+    csvdiff = 'null_loop_hydro_50_200.csv'
+    abs_zero = 1e-4
+    rel_err = 1e-5
+    requirement = 'The mirrored mesh of the previous test shall give the mirrored result (no '
+                  'spurious loop flow in either direction).'
+  []
+  [null_column_hjpc_100_25]
+    type = 'CSVDiff'
+    input = 'null_column.i'
+    cli_args = 'jt=HydrostaticJunctionParallelChannels1Phase nA=100 nB=25 AB=0.5 g=-9.81 '
+               'Outputs/file_base=null_column_hjpc_100_25'
+    csvdiff = 'null_column_hjpc_100_25.csv'
+    abs_zero = 1e-4
+    rel_err = 1e-5
+    requirement = 'A column at rest with an open top and a HydrostaticJunctionParallelChannels1Phase '
+                  'between a 35 mm cell above and a 140 mm cell below shall stay at rest with the '
+                  'exact hydrostatic pressure at the bottom.'
+  []
+  [null_column_hjpc_100_25_contraction]
+    type = 'CSVDiff'
+    input = 'null_column.i'
+    cli_args = 'jt=HydrostaticJunctionParallelChannels1Phase nA=100 nB=25 AB=0.1087 g=-9.81 '
+               'Outputs/file_base=null_column_hjpc_100_25_A0.1087'
+    csvdiff = 'null_column_hjpc_100_25_A0.1087.csv'
+    abs_zero = 1e-4
+    rel_err = 1e-5
+    requirement = 'The same column with a 4.6:1 area contraction at the junction shall stay at '
+                  'rest, with the wall term of the abrupt area change model evaluated with the face '
+                  'pressure at the junction elevation.'
+  []
+  [null_column_hvj_100_25]
+    type = 'CSVDiff'
+    input = 'null_column.i'
+    cli_args = 'jt=HydrostaticVolumeJunction1Phase nA=100 nB=25 AB=0.5 g=-9.81 '
+               'Outputs/file_base=null_column_hvj_100_25'
+    csvdiff = 'null_column_hvj_100_25.csv'
+    abs_zero = 1e-4
+    rel_err = 1e-5
+    requirement = 'A column at rest with an open top and a HydrostaticVolumeJunction1Phase between a '
+                  '35 mm cell above and a 140 mm cell below shall stay at rest with the exact '
+                  'hydrostatic pressure at the bottom.'
+  []
+  [null_tee_hvj_100_25]
+    type = 'CSVDiff'
+    input = 'null_tee.i'
+    cli_args = 'jt=HydrostaticVolumeJunction1Phase nA=100 nB=25 g=-9.81 '
+               'Outputs/file_base=null_tee_hvj_100_25'
+    csvdiff = 'null_tee_hvj_100_25.csv'
+    abs_zero = 1e-4
+    rel_err = 1e-5
+    requirement = 'The same column with a third, horizontal channel with a closed end at the '
+                  'HydrostaticVolumeJunction1Phase (channels on opposite sides and a vertical to '
+                  'horizontal connection) shall stay at rest.'
+  []
+  [null_loop_hvj_200_50]
+    type = 'CSVDiff'
+    input = 'null_loop.i'
+    cli_args = 'jt=HydrostaticVolumeJunction1Phase nA=200 nB=50 AB=0.5 g=-9.81 rdg=minmod '
+               'Outputs/file_base=null_loop_hvj_200_50'
+    csvdiff = 'null_loop_hvj_200_50.csv'
+    abs_zero = 1e-4
+    rel_err = 1e-5
+    requirement = 'A closed isothermal loop of two vertical legs at rest, joined by '
+                  'HydrostaticVolumeJunction1Phase with 35 mm cells on one side and 140 mm on the '
+                  'other, shall stay at rest with the exact hydrostatic pressure jump between the '
+                  'junction-adjacent cell centers.'
+  []
+[]

@@ -346,3 +346,6 @@ binaryoutput
 # Nsight Systems profiling output
 *.nsys-rep
 *.sqlite
+
+# outputs of scripts/reproduce.sh
+reproduce_out/

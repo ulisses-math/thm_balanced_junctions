@@ -13,7 +13,8 @@ ThmBalancedJunctionsApp::validParams()
   return params;
 }
 
-ThmBalancedJunctionsApp::ThmBalancedJunctionsApp(const InputParameters & parameters) : MooseApp(parameters)
+ThmBalancedJunctionsApp::ThmBalancedJunctionsApp(const InputParameters & parameters)
+  : MooseApp(parameters)
 {
   ThmBalancedJunctionsApp::registerAll(_factory, _action_factory, _syntax);
 }
