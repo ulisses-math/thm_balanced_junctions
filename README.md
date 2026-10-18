@@ -141,4 +141,4 @@ LGPL 2.1, the same as MOOSE (see `LICENSE`). Parts of the source are adapted fro
 ## Contact
 
 Ulisses Alves Maciel Neto (Faculdade Ibmec São Paulo and Centro Tecnológico da Marinha em São Paulo,
-CTMSP).
+CTMSP), ulisses.neto@professores.ibmec.edu.br.
