@@ -38,9 +38,12 @@ run loop_hvj null_loop.i jt=HydrostaticVolumeJunction1Phase nA=200 nB=50 &
 run loop_stag_off null_loop.i jt=StagnationJunction1Phase nA=200 nB=50 \
   Components/top_jct/hydrostatic_correction=false Components/bot_jct/hydrostatic_correction=false &
 run loop_stag null_loop.i jt=StagnationJunction1Phase nA=200 nB=50 &
+# official JunctionOneToOne1Phase (no corrected version in this application)
+run col_o2o null_column_o2o.i nA=100 nB=25 &
+run loop_o2o null_loop_o2o.i nA=200 nB=50 &
 wait
 
-for tag in col_jpc col_hjpc col_vj col_hvj colc_jpc colc_hjpc; do
+for tag in col_jpc col_hjpc col_vj col_hvj colc_jpc colc_hjpc col_o2o; do
   echo
   echo "== $tag"
   python3 scripts/check_hydro_profile.py $O/${tag}_prof_[0-9]*.csv | tail -7
@@ -58,7 +61,7 @@ import sys
 o = sys.argv[1]
 print("== closed loop, at t = 300 s")
 print(f"  {'case':14s} {'mdot_A [kg/s]':>14s} {'offset_top [Pa]':>16s}")
-for tag in ["loop_vj", "loop_hvj", "loop_stag_off", "loop_stag"]:
+for tag in ["loop_vj", "loop_hvj", "loop_stag_off", "loop_stag", "loop_o2o"]:
     r = list(csv.DictReader(open(f"{o}/{tag}.csv")))[-1]
     print(f"  {tag:14s} {float(r['mdot_A']):14.5f} {float(r['offset_top']):16.2f}")
 print("  exact hydrostatic offset_top: -rho * g * (0.140 - 0.035) / 2 = about -510.6 Pa")

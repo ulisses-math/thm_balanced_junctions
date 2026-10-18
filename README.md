@@ -24,8 +24,17 @@ where dz is the height of that cell (with the default rDG reconstruction; with
 velocity in the cells next to the junction, so the error is a fixed pressure offset and not a
 circulation. It only matters when the physical driving pressures are of the same order, as in
 buoyancy-driven flow reversal.
-- `JunctionOneToOne1Phase` is not balanced either, for a different reason (its stencil places the
-cell on the other side at the mirrored position of the interior neighbor); it is not covered here.
+- `JunctionOneToOne1Phase` is not balanced either, for a different reason: the slope reconstruction
+places the cell on the other side of the junction at the mirrored position of the interior neighbor
+(`SlopeReconstruction1DInterface.h`, "assumed to be the same distance away"), not at the real
+distance between the cell centers. With unequal cells, the slope across the junction is too large in
+the smaller cell and too small in the larger one, and the minmod limiter keeps the smaller slope.
+The reconstruction is done in `ADJunctionOneToOne1PhaseUserObject::finalize()`, through
+`getBoundaryElementSlopes()`; a corrected version would pass the real position of the cell on the
+other side. This application has reproducers for it, but no corrected version.
+- The documentation of `JunctionOneToOne1Phase` says that the two channels must have the same flow
+area, but `check()` only checks the number of connections, so channels with different areas are
+accepted without a warning.
 
 ## The correction
 
@@ -70,7 +79,9 @@ mid-height (channels on opposite sides of the junction);
 - `null_tee.i`: the same column with a third, horizontal channel at the junction (opposite sides and
 a vertical to horizontal connection);
 - `null_loop.i`: a closed loop of two 7 m vertical legs and two junctions (both legs on the same side
-of each junction).
+of each junction);
+- `null_column_o2o.i` and `null_loop_o2o.i`: the column and the loop with the official
+`JunctionOneToOne1Phase`, which takes different parameters (no volume, the same area on both sides).
 
 The junction type and the meshes are set on the command line, for example:
 
@@ -95,7 +106,7 @@ scripts/reproduce.sh
 
 `run_tests` runs seven CSVDiff tests (absolute tolerance 1e-4 kg/s on the mass flow rate) with the
 three classes. `scripts/reproduce.sh` runs the reproducers with the official junctions and with the
-classes of this application, and prints the comparison (about one minute on 16 cores).
+classes of this application (14 runs), and prints the comparison (about one minute on 16 cores).
 `scripts/check_hydro_profile.py` compares a final profile with the hydrostatic profile, cell by cell,
 using the density of the solution.
 
@@ -112,6 +123,8 @@ at t = 300 s.
 | T junction, `VolumeJunction1Phase` | +85.1 Pa, -340.6 Pa, -85.1 Pa in the horizontal channel | 0.000 Pa in every cell of the three channels |
 | loop, `VolumeJunction1Phase` | jump between the cell centers next to the top junction -255.4 Pa (exact: about -510.6 Pa); rho*u*A -0.032 kg/s | -510.86 Pa; below 1e-5 kg/s |
 | loop, `StagnationJunction1Phase` | with `hydrostatic_correction = false`: loop flow of 1214 kg/s | below 1e-5 kg/s |
+| column, `JunctionOneToOne1Phase` | +21.3 Pa (cell above), -242.7 Pa (cell below) | no corrected version |
+| loop, `JunctionOneToOne1Phase` | jump between the cell centers next to the top junction -306.5 Pa (exact: about -510.6 Pa); rho*u*A -0.034 kg/s | no corrected version |
 
 Notes:
 
